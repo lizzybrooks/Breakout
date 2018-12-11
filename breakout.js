@@ -4,8 +4,8 @@ let balls = [];
 ballX=500;
 ballY=650;
 
-brickX= 20;
-brickY = 7;
+brickX= 400;
+brickY = 20;
 
 let paddleX = 400;
 
@@ -16,18 +16,22 @@ bricks = [];
 function setup() {
   background("black");
   createCanvas(800,700);
+  rectMode(CENTER);
   paddleX = 400;
   frameRate(180);
   k = new Ball(ballX,ballY,20,20,7,7); //make a new ball from the Ball class and call it b.
 
-for (let h=0; h < 250; h += 50){
-  for (let i = 0; i <750 ; i = i + 75){
-    let b = new Brick(brickX + i ,brickY , false);
-  }
-    bricks.push(b);
+
+  for (let i = 0; i <9 ; i = i + 1){
+    brickX = 400;
+    for (let j =0; j<i; j++){
+      let b = new Brick(brickX, brickY , false);
+      bricks.push(b);
+      brickX += 75;
+    }
+    brickY+=50;
 
   }
-// }
 
 }
 
