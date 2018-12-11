@@ -7,24 +7,27 @@ ballY=650;
 brickX= 20;
 brickY = 7;
 
+let paddleX = 400;
+
+
 bricks = [];
 
 
 function setup() {
   background("black");
   createCanvas(800,700);
-  frameRate(30);
-  k = new Ball(ballX,ballY,20,20,5,5); //make a new ball from the Ball class and call it b.
+  paddleX = 400;
+  frameRate(180);
+  k = new Ball(ballX,ballY,20,20,7,7); //make a new ball from the Ball class and call it b.
 
 for (let h=0; h < 250; h += 50){
   for (let i = 0; i <750 ; i = i + 75){
-    let b = new Brick(brickX + i ,brickY + h, false);
-    bricks.push(b);
-  //  print(bricks);
+    let b = new Brick(brickX + i ,brickY , false);
   }
-}
+    bricks.push(b);
 
-
+  }
+// }
 
 }
 
@@ -35,14 +38,14 @@ function draw(){
     k.moveBall();
     k.bounceBall();
     k.bounceBricks();
+
     paddle();
+    if (frameCount>= 70){
+        paddleX = mouseX;
+    }
 
+    print(paddleX);
 
-//for (let i=0;i<=4;i++){
-
-
-  //  translate(0,50);
-  // }
 
 for (let i=0;i<bricks.length; i ++ ){
   bricks[i].drawBrick();
@@ -52,17 +55,16 @@ for (let i=0;i<bricks.length; i ++ ){
 }
 
 
-
 function paddle() {
-  stroke("white");
-  strokeWeight(10);
-  line(mouseX - 40, 650, mouseX + 40, 650);
+  stroke("white");
+  strokeWeight(10);
+  line(paddleX - 40, 650, paddleX + 40, 650);
 
 }
-// function keyPressed() {
-//   if (keyCode == 32)
-//     location.reload(true);
-// }
+function keyPressed() {
+  if (keyCode == 32)
+    location.reload(true);
+}
 
 function brick(x,y) {
   fill("pink");
@@ -75,40 +77,42 @@ function brick(x,y) {
 
 class Brick {
 
-	constructor(x,y, broke) //every ball needs an x value and a y value
+	constructor(x,y, broke, broke1) //every ball needs an x value and a y value
     {
 		 this.x = x;
   	 this.y = y;
      this.broke = broke;
+     this.broke1 = broke1;
+
 	  }
 
     drawBrick() { // draw a ball on the screen at x,y
 
-
       if (this.broke == true){
         fill("black");
+        this.x = 2000;
+        this.y = 2000;
 
-      }
-      else if (this.broke == false){
-        fill("pink");
+      }  else if (this.broke == false){
+        fill("red");
 
       }
       else {
         fill("turquoise");
 
       }
-      strokeWeight(1);
+      noStroke();
       rect(this.x,this.y,70,30);
 }
 
 
       breakBrick(){
-        if(k.x>=this.x && k.x<= this.x+70 && k.y<=this.y){
-
+        if(k.x>=this.x && k.x<= this.x+70 && k.y<=this.y+30){
             this.broke = true;
             print(this.broke);
             fill("black");
             rect(this.x,this.y,70,30);
+            noStroke();
         }
       }
   }
@@ -123,6 +127,7 @@ class Ball {
      this.width = width;
      this.speedx = speedx;
      this.speedy = speedy;
+
 	  }
 
   drawBall() { // draw a ball on the screen at x,y
@@ -130,6 +135,7 @@ class Ball {
     strokeWeight(1);
     fill("white");
 		ellipse(this.x,this.y,this.height,this.width);
+    // balls.style.zIndex="1"
 	  }
 	moveBall() { //update the location of the ball, so it moves across the screen
 		this.x = this.x-this.speedx;
@@ -158,21 +164,19 @@ class Ball {
         }
 
        if (this.x >= mouseX - 50 && this.x <= mouseX + 50 && this.y >= 650 - 12 && this.y <= 650 + 12) {
-           this.speedy = -this.speedy;
+           this.speedy = -this.speedy;
       // this.speedx = -this.speedx;
         console.log(this.speedx);
         console.log(this.speedy);
         }
 
-        // else{
-        //   print ("catch");
-        // }
-      // }
   }
   bounceBricks(){
     for (let i = 0; i < bricks.length; i++){
-      if (this.x>= bricks[i].x && this.x <= bricks[i].x+70 && this.y <= bricks[i].y && bricks[i].broke == false ){
+      if (this.x>= bricks[i].x && this.x <= bricks[i].x+140 && this.y <= bricks[i].y+30 && bricks[i].broke == false ){
         this.speedy = -this.speedy;
+        frameRate=frameRate*1.5;
+
       }
 
     }
